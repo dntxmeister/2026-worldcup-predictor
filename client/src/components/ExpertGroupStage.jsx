@@ -20,93 +20,93 @@ const GROUP_SCHEDULES = {
     ["MD3", "Jun 24", "9PM", "Monterrey", "RSA", "KOR"]
   ],
   B: [
-    ["MD1", "Jun 12", "12PM", "Toronto", "CAN", "BIH"],
-    ["MD1", "Jun 12", "9PM", "Los Angeles", "QAT", "SUI"],
-    ["MD2", "Jun 18", "3PM", "Seattle", "QAT", "BIH"],
-    ["MD2", "Jun 18", "10PM", "Vancouver", "CAN", "SUI"],
-    ["MD3", "Jun 24", "9PM", "Toronto", "CAN", "QAT"],
-    ["MD3", "Jun 24", "9PM", "Los Angeles", "BIH", "SUI"]
+    ["MD1", "Jun 12", "3PM", "Toronto", "CAN", "BIH"],
+    ["MD1", "Jun 12", "3PM", "San Francisco", "QAT", "SUI"],
+    ["MD2", "Jun 18", "3PM", "Los Angeles", "SUI", "BIH"],
+    ["MD2", "Jun 18", "10PM", "Vancouver", "CAN", "QAT"],
+    ["MD3", "Jun 24", "9PM", "Vancouver", "SUI", "CAN"],
+    ["MD3", "Jun 24", "9PM", "Seattle", "BIH", "QAT"]
   ],
   C: [
     ["MD1", "Jun 13", "6PM", "New York", "BRA", "MAR"],
-    ["MD1", "Jun 13", "10PM", "Dallas", "HAI", "SCO"],
-    ["MD2", "Jun 19", "3PM", "Boston", "HAI", "MAR"],
-    ["MD2", "Jun 19", "9PM", "Miami", "BRA", "SCO"],
-    ["MD3", "Jun 25", "9PM", "Dallas", "BRA", "HAI"],
-    ["MD3", "Jun 25", "9PM", "Boston", "MAR", "SCO"]
+    ["MD1", "Jun 13", "10PM", "Boston", "HAI", "SCO"],
+    ["MD2", "Jun 19", "3PM", "Boston", "SCO", "MAR"],
+    ["MD2", "Jun 19", "9PM", "Philadelphia", "BRA", "HAI"],
+    ["MD3", "Jun 25", "9PM", "Miami", "SCO", "BRA"],
+    ["MD3", "Jun 25", "9PM", "Atlanta", "MAR", "HAI"]
   ],
   D: [
     ["MD1", "Jun 12", "9PM", "Los Angeles", "USA", "PAR"],
-    ["MD1", "Jun 13", "6PM", "Seattle", "AUS", "TUR"],
-    ["MD2", "Jun 19", "3PM", "Vancouver", "AUS", "PAR"],
-    ["MD2", "Jun 19", "9PM", "Seattle", "USA", "TUR"],
-    ["MD3", "Jun 25", "9PM", "Los Angeles", "USA", "AUS"],
-    ["MD3", "Jun 25", "9PM", "San Francisco", "PAR", "TUR"]
+    ["MD1", "Jun 13", "6PM", "Vancouver", "AUS", "TUR"],
+    ["MD2", "Jun 19", "3PM", "Seattle", "USA", "AUS"],
+    ["MD2", "Jun 19", "9PM", "San Francisco", "TUR", "PAR"],
+    ["MD3", "Jun 25", "9PM", "Los Angeles", "TUR", "USA"],
+    ["MD3", "Jun 25", "9PM", "San Francisco", "PAR", "AUS"]
   ],
   E: [
     ["MD1", "Jun 14", "12PM", "Houston", "GER", "CUW"],
-    ["MD1", "Jun 14", "9PM", "Dallas", "CIV", "ECU"],
-    ["MD2", "Jun 20", "12PM", "Kansas City", "CIV", "CUW"],
-    ["MD2", "Jun 20", "8PM", "Houston", "GER", "ECU"],
-    ["MD3", "Jun 26", "9PM", "Dallas", "GER", "CIV"],
-    ["MD3", "Jun 26", "9PM", "Kansas City", "CUW", "ECU"]
+    ["MD1", "Jun 14", "9PM", "Philadelphia", "CIV", "ECU"],
+    ["MD2", "Jun 20", "12PM", "Toronto", "GER", "CIV"],
+    ["MD2", "Jun 20", "8PM", "Kansas City", "ECU", "CUW"],
+    ["MD3", "Jun 26", "9PM", "Philadelphia", "CUW", "CIV"],
+    ["MD3", "Jun 26", "9PM", "New York", "ECU", "GER"]
   ],
   F: [
-    ["MD1", "Jun 14", "3PM", "Seattle", "NED", "JPN"],
-    ["MD1", "Jun 14", "10PM", "Vancouver", "SWE", "TUN"],
-    ["MD2", "Jun 20", "2PM", "San Francisco", "SWE", "JPN"],
-    ["MD2", "Jun 20", "9PM", "Seattle", "NED", "TUN"],
-    ["MD3", "Jun 26", "9PM", "Vancouver", "NED", "SWE"],
-    ["MD3", "Jun 26", "9PM", "San Francisco", "JPN", "TUN"]
+    ["MD1", "Jun 14", "3PM", "Dallas", "NED", "JPN"],
+    ["MD1", "Jun 14", "10PM", "Monterrey", "SWE", "TUN"],
+    ["MD2", "Jun 20", "2PM", "Houston", "NED", "SWE"],
+    ["MD2", "Jun 20", "9PM", "Monterrey", "TUN", "JPN"],
+    ["MD3", "Jun 26", "9PM", "Dallas", "JPN", "SWE"],
+    ["MD3", "Jun 26", "9PM", "Kansas City", "TUN", "NED"]
   ],
   G: [
-    ["MD1", "Jun 15", "12PM", "Los Angeles", "BEL", "EGY"],
-    ["MD1", "Jun 15", "9PM", "Seattle", "IRN", "NZL"],
-    ["MD2", "Jun 21", "2PM", "Miami", "IRN", "EGY"],
-    ["MD2", "Jun 21", "9PM", "Atlanta", "BEL", "NZL"],
-    ["MD3", "Jun 27", "9PM", "Los Angeles", "BEL", "IRN"],
-    ["MD3", "Jun 27", "9PM", "Seattle", "EGY", "NZL"]
+    ["MD1", "Jun 15", "12PM", "Seattle", "BEL", "EGY"],
+    ["MD1", "Jun 15", "9PM", "Los Angeles", "IRN", "NZL"],
+    ["MD2", "Jun 21", "2PM", "Los Angeles", "BEL", "IRN"],
+    ["MD2", "Jun 21", "9PM", "Vancouver", "NZL", "EGY"],
+    ["MD3", "Jun 27", "9PM", "Seattle", "EGY", "IRN"],
+    ["MD3", "Jun 27", "9PM", "Vancouver", "NZL", "BEL"]
   ],
   H: [
     ["MD1", "Jun 15", "12PM", "Atlanta", "ESP", "CPV"],
     ["MD1", "Jun 15", "9PM", "Miami", "KSA", "URU"],
-    ["MD2", "Jun 21", "12PM", "Houston", "KSA", "CPV"],
-    ["MD2", "Jun 21", "8PM", "Dallas", "ESP", "URU"],
-    ["MD3", "Jun 27", "9PM", "Atlanta", "ESP", "KSA"],
-    ["MD3", "Jun 27", "9PM", "Miami", "CPV", "URU"]
+    ["MD2", "Jun 21", "12PM", "Atlanta", "ESP", "KSA"],
+    ["MD2", "Jun 21", "8PM", "Miami", "URU", "CPV"],
+    ["MD3", "Jun 27", "9PM", "Houston", "CPV", "KSA"],
+    ["MD3", "Jun 27", "9PM", "Guadalajara", "URU", "ESP"]
   ]
 };
 
 const GROUP_DATE_CITY_SLOTS = {
   I: [
     ["MD1", "Jun 16", "3PM", "New York"],
-    ["MD1", "Jun 16", "9PM", "Philadelphia"],
-    ["MD2", "Jun 22", "3PM", "Boston"],
-    ["MD2", "Jun 22", "8PM", "Toronto"],
-    ["MD3", "Jun 28", "9PM", "New York"],
-    ["MD3", "Jun 28", "9PM", "Philadelphia"]
+    ["MD1", "Jun 16", "9PM", "Boston"],
+    ["MD2", "Jun 22", "3PM", "Philadelphia"],
+    ["MD2", "Jun 22", "8PM", "New York"],
+    ["MD3", "Jun 28", "9PM", "Boston"],
+    ["MD3", "Jun 28", "9PM", "Toronto"]
   ],
   J: [
-    ["MD1", "Jun 16", "12PM", "Houston"],
-    ["MD1", "Jun 16", "9PM", "Dallas"],
-    ["MD2", "Jun 22", "12PM", "Kansas City"],
-    ["MD2", "Jun 22", "8PM", "Houston"],
-    ["MD3", "Jun 28", "9PM", "Dallas"],
-    ["MD3", "Jun 28", "9PM", "Kansas City"]
+    ["MD1", "Jun 16", "12PM", "Kansas City"],
+    ["MD1", "Jun 16", "9PM", "San Francisco"],
+    ["MD2", "Jun 22", "12PM", "Dallas"],
+    ["MD2", "Jun 22", "8PM", "San Francisco"],
+    ["MD3", "Jun 28", "9PM", "Kansas City"],
+    ["MD3", "Jun 28", "9PM", "Dallas"]
   ],
   K: [
-    ["MD1", "Jun 17", "3PM", "Seattle"],
-    ["MD1", "Jun 17", "9PM", "Vancouver"],
-    ["MD2", "Jun 23", "2PM", "San Francisco"],
-    ["MD2", "Jun 23", "9PM", "Seattle"],
-    ["MD3", "Jun 29", "9PM", "Vancouver"],
-    ["MD3", "Jun 29", "9PM", "San Francisco"]
+    ["MD1", "Jun 17", "3PM", "Houston"],
+    ["MD1", "Jun 17", "9PM", "Mexico City"],
+    ["MD2", "Jun 23", "2PM", "Houston"],
+    ["MD2", "Jun 23", "9PM", "Guadalajara"],
+    ["MD3", "Jun 29", "9PM", "Miami"],
+    ["MD3", "Jun 29", "9PM", "Atlanta"]
   ],
   L: [
-    ["MD1", "Jun 17", "12PM", "Boston"],
-    ["MD1", "Jun 17", "9PM", "New York"],
-    ["MD2", "Jun 23", "1PM", "Philadelphia"],
-    ["MD2", "Jun 23", "8PM", "Boston"],
+    ["MD1", "Jun 17", "12PM", "Dallas"],
+    ["MD1", "Jun 17", "9PM", "Toronto"],
+    ["MD2", "Jun 23", "1PM", "Boston"],
+    ["MD2", "Jun 23", "8PM", "Toronto"],
     ["MD3", "Jun 29", "9PM", "New York"],
     ["MD3", "Jun 29", "9PM", "Philadelphia"]
   ]
