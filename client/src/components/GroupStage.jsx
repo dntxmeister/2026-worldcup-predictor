@@ -134,12 +134,16 @@ export default function GroupStage({
   function moveTeamToPosition(groupId, fromIndex, toIndex) {
     if (tournamentChallengeLocked) return;
     if (fromIndex === toIndex) return;
+    if (toIndex < 0 || toIndex > 3) return;
 
     setGroups(prev =>
       prev.map(group => {
         if (group.id !== groupId) return group;
 
         const pickedTeams = getPickedTeams(group);
+        if (!pickedTeams[fromIndex]) return group;
+        if (toIndex >= pickedTeams.length) return group;
+
         const nextTeams = [...pickedTeams];
 
         const [movedTeam] = nextTeams.splice(fromIndex, 1);
@@ -282,7 +286,7 @@ export default function GroupStage({
                         pickedTeams.length >= 4
                       }
                       onClick={() => selectTeam(group.id, team)}
-                      className={`rounded-2xl border px-1 py-3 sm:py-4 min-h-[82px] sm:min-h-[104px] flex flex-col items-center justify-center gap-1.5 sm:gap-2 transition ${
+                      className={`relative group rounded-2xl border px-1 py-3 sm:py-4 min-h-[82px] sm:min-h-[104px] flex flex-col items-center justify-center gap-1.5 sm:gap-2 transition ${
                         selected || tournamentChallengeLocked
                           ? darkMode
                             ? "bg-slate-900 border-slate-600 opacity-40 cursor-not-allowed"
@@ -298,6 +302,10 @@ export default function GroupStage({
 
                       <span className="text-sm sm:text-base font-extrabold">
                         {team.fifaCode}
+                      </span>
+
+                      <span className="pointer-events-none absolute -top-10 left-1/2 z-50 -translate-x-1/2 whitespace-nowrap rounded-full bg-slate-950 px-3 py-1.5 text-xs font-bold text-white opacity-0 shadow-lg transition group-hover:opacity-100 group-focus:opacity-100">
+                        {team.name}
                       </span>
                     </button>
                   );
@@ -394,22 +402,66 @@ export default function GroupStage({
                           </div>
                         </div>
 
-                        <button
-                          type="button"
-                          disabled={tournamentChallengeLocked}
-                          className={`text-base sm:text-xl leading-none font-normal ${
-                            darkMode
-                              ? "text-slate-400 hover:text-white"
-                              : "text-slate-500 hover:text-slate-700"
-                          } ${
-                            tournamentChallengeLocked
-                              ? "opacity-30 cursor-not-allowed"
-                              : "opacity-70 hover:opacity-100 cursor-grab"
-                          }`}
-                          title="Drag to reorder"
-                        >
-                          ☰
-                        </button>
+                        <div className="flex items-center gap-1 flex-shrink-0">
+                          <div className="flex sm:hidden flex-col gap-1">
+                            <button
+                              type="button"
+                              disabled={tournamentChallengeLocked || index === 0}
+                              onClick={() =>
+                                moveTeamToPosition(group.id, index, index - 1)
+                              }
+                              className={`h-7 w-7 rounded-md text-xs font-extrabold ${
+                                tournamentChallengeLocked || index === 0
+                                  ? "bg-slate-600 text-slate-400 opacity-40 cursor-not-allowed"
+                                  : darkMode
+                                  ? "bg-slate-700 text-white"
+                                  : "bg-slate-200 text-slate-800"
+                              }`}
+                              title="Move up"
+                            >
+                              ↑
+                            </button>
+
+                            <button
+                              type="button"
+                              disabled={
+                                tournamentChallengeLocked ||
+                                index === pickedTeams.length - 1
+                              }
+                              onClick={() =>
+                                moveTeamToPosition(group.id, index, index + 1)
+                              }
+                              className={`h-7 w-7 rounded-md text-xs font-extrabold ${
+                                tournamentChallengeLocked ||
+                                index === pickedTeams.length - 1
+                                  ? "bg-slate-600 text-slate-400 opacity-40 cursor-not-allowed"
+                                  : darkMode
+                                  ? "bg-slate-700 text-white"
+                                  : "bg-slate-200 text-slate-800"
+                              }`}
+                              title="Move down"
+                            >
+                              ↓
+                            </button>
+                          </div>
+
+                          <button
+                            type="button"
+                            disabled={tournamentChallengeLocked}
+                            className={`hidden sm:block text-xl leading-none font-normal ${
+                              darkMode
+                                ? "text-slate-400 hover:text-white"
+                                : "text-slate-500 hover:text-slate-700"
+                            } ${
+                              tournamentChallengeLocked
+                                ? "opacity-30 cursor-not-allowed"
+                                : "opacity-70 hover:opacity-100 cursor-grab"
+                            }`}
+                            title="Drag to reorder"
+                          >
+                            ☰
+                          </button>
+                        </div>
                       </div>
                     </div>
                   );
