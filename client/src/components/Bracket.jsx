@@ -356,177 +356,179 @@ function autofillBracketToRound(bracket, targetRound) {
 }
 
 export default function Bracket({ bracket, setBracket, darkMode }) {
-  const [autofillTarget, setAutofillTarget] = useState("roundOf32");
-  const [originalBracket] = useState(() => structuredClone(bracket));
-
-  function handleAutofillBracket() {
-    setBracket(prev => {
-      if (!prev) return prev;
-      return autofillBracketToRound(prev, autofillTarget);
-    });
-  }
-
-  function handleResetBracket() {
-    if (!window.confirm("Reset all bracket selections and scores?")) {
-      return;
+    const [autofillTarget, setAutofillTarget] = useState("roundOf32");
+    const [originalBracket] = useState(() => structuredClone(bracket));
+  
+    function handleAutofillBracket() {
+      setBracket(prev => {
+        if (!prev) return prev;
+        return autofillBracketToRound(prev, autofillTarget);
+      });
     }
-
-    setBracket(structuredClone(originalBracket));
-  }
-
-  function pickWinner(roundName, matchIndex, team) {
-    if (!team || team.isPlaceholder) return;
-
-    setBracket(prev => {
-      const updated = structuredClone(prev);
-      const match = updated[roundName][matchIndex];
-
-      if (!match?.teamA || !match?.teamB) return prev;
-
-      const winner = team;
-      const loser =
-        winner.fifaCode === match.teamA.fifaCode ? match.teamB : match.teamA;
-
-      if (!isRealTeam(winner) || !isRealTeam(loser)) return prev;
-
-      const result = getBracketResult(winner, loser);
-
-      if (winner.fifaCode === match.teamA.fifaCode) {
-        match.scoreA = result.winnerScore;
-        match.scoreB = result.loserScore;
-      } else {
-        match.scoreA = result.loserScore;
-        match.scoreB = result.winnerScore;
+  
+    function handleResetBracket() {
+      if (!window.confirm("Reset all bracket selections and scores?")) {
+        return;
       }
-
-      match.penaltyText = result.penaltyText;
-      match.userLocked = true;
-      match.simulated = false;
-
-      return advanceWinner(updated, roundName, matchIndex, winner);
-    });
-  }
-
-  function updateScore(roundName, matchIndex, teamIndex, value) {
-    setBracket(prev => {
-      const updated = structuredClone(prev);
-      const match = updated[roundName][matchIndex];
-
-      if (!match) return prev;
-
-      const cleanValue = value === "" ? "" : Number(value);
-
-      if (teamIndex === 0) {
-        match.scoreA = cleanValue;
-      } else {
-        match.scoreB = cleanValue;
-      }
-
-      match.penaltyText = "";
-      match.userLocked = true;
-      match.simulated = false;
-
-      const hasA = match.scoreA !== "" && match.scoreA !== undefined;
-      const hasB = match.scoreB !== "" && match.scoreB !== undefined;
-
-      if (hasA && hasB && Number(match.scoreA) !== Number(match.scoreB)) {
-        const winner =
-          Number(match.scoreA) > Number(match.scoreB) ? match.teamA : match.teamB;
-
-        if (winner && !winner.isPlaceholder) {
-          return advanceWinner(updated, roundName, matchIndex, winner);
+  
+      setBracket(structuredClone(originalBracket));
+    }
+  
+    function pickWinner(roundName, matchIndex, team) {
+      if (!team || team.isPlaceholder) return;
+  
+      setBracket(prev => {
+        const updated = structuredClone(prev);
+        const match = updated[roundName][matchIndex];
+  
+        if (!match?.teamA || !match?.teamB) return prev;
+  
+        const winner = team;
+        const loser =
+          winner.fifaCode === match.teamA.fifaCode ? match.teamB : match.teamA;
+  
+        if (!isRealTeam(winner) || !isRealTeam(loser)) return prev;
+  
+        const result = getBracketResult(winner, loser);
+  
+        if (winner.fifaCode === match.teamA.fifaCode) {
+          match.scoreA = result.winnerScore;
+          match.scoreB = result.loserScore;
+        } else {
+          match.scoreA = result.loserScore;
+          match.scoreB = result.winnerScore;
         }
-      }
-
-      return updated;
-    });
-  }
-
-  return (
-    <section
-      className={`rounded-3xl shadow-2xl p-6 overflow-x-auto transition ${
-        darkMode ? "bg-slate-900 text-white" : "bg-white text-slate-900"
-      }`}
-    >
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-        <div>
-          <h2 className="text-3xl font-extrabold mb-2">
-            2026 World Cup Bracket
-          </h2>
-
-          <p className={darkMode ? "text-slate-300" : "text-gray-600"}>
-            Click a team, manually input scores, or select "Simulate Bracket" and choose the desired tournament round to simulate
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <select
-            value={autofillTarget}
-            onChange={e => setAutofillTarget(e.target.value)}
-            className={`rounded-full px-4 py-3 font-bold outline-none ${
-              darkMode
-                ? "bg-slate-800 text-white border border-slate-600"
-                : "bg-white text-slate-900 border border-slate-300"
-            }`}
-          >
-            <option value="roundOf32">Round of 32 only</option>
-            <option value="roundOf16">Through Round of 16</option>
-            <option value="quarterFinals">Through Quarterfinals</option>
-            <option value="semiFinals">Through Semifinals</option>
-            <option value="final">Entire Tournament</option>
-          </select>
-
-          <button
-            onClick={handleResetBracket}
-            className="rounded-full bg-red-600 text-white px-6 py-3 font-bold hover:bg-red-700 transition"
-          >
-            Reset Bracket
-          </button>
-
-          <button
-            onClick={handleAutofillBracket}
-            className="rounded-full bg-purple-600 text-white px-6 py-3 font-bold hover:bg-purple-700 transition"
-          >
-            Simulate Bracket
-          </button>
-        </div>
-      </div>
-
-      <div
-        id="bracket-root"
-        className={`relative mx-auto w-[1810px] h-[1330px] ${
-          darkMode ? "bg-slate-900" : "bg-white"
+  
+        match.penaltyText = result.penaltyText;
+        match.userLocked = true;
+        match.simulated = false;
+  
+        return advanceWinner(updated, roundName, matchIndex, winner);
+      });
+    }
+  
+    function updateScore(roundName, matchIndex, teamIndex, value) {
+      setBracket(prev => {
+        const updated = structuredClone(prev);
+        const match = updated[roundName][matchIndex];
+  
+        if (!match) return prev;
+  
+        const cleanValue = value === "" ? "" : Number(value);
+  
+        if (teamIndex === 0) {
+          match.scoreA = cleanValue;
+        } else {
+          match.scoreB = cleanValue;
+        }
+  
+        match.penaltyText = "";
+        match.userLocked = true;
+        match.simulated = false;
+  
+        const hasA = match.scoreA !== "" && match.scoreA !== undefined;
+        const hasB = match.scoreB !== "" && match.scoreB !== undefined;
+  
+        if (hasA && hasB && Number(match.scoreA) !== Number(match.scoreB)) {
+          const winner =
+            Number(match.scoreA) > Number(match.scoreB) ? match.teamA : match.teamB;
+  
+          if (winner && !winner.isPlaceholder) {
+            return advanceWinner(updated, roundName, matchIndex, winner);
+          }
+        }
+  
+        return updated;
+      });
+    }
+  
+    return (
+      <section
+        className={`rounded-3xl shadow-2xl p-3 sm:p-6 transition ${
+          darkMode ? "bg-slate-900 text-white" : "bg-white text-slate-900"
         }`}
       >
-        <Headers darkMode={darkMode} />
-        <BracketLines />
-
-        <Side
-          side="left"
-          bracket={bracket}
-          onPick={pickWinner}
-          onScoreChange={updateScore}
-          darkMode={darkMode}
-        />
-
-        <Center
-          bracket={bracket}
-          onPick={pickWinner}
-          onScoreChange={updateScore}
-          darkMode={darkMode}
-        />
-
-        <Side
-          side="right"
-          bracket={bracket}
-          onPick={pickWinner}
-          onScoreChange={updateScore}
-          darkMode={darkMode}
-        />
-      </div>
-    </section>
-  );
-}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">
+              2026 World Cup Bracket
+            </h2>
+  
+            <p className={darkMode ? "text-slate-300" : "text-gray-600"}>
+              Click a team, manually input scores, or select "Simulate Bracket" and choose the desired tournament round to simulate
+            </p>
+          </div>
+  
+          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 w-full lg:w-auto">
+            <select
+              value={autofillTarget}
+              onChange={e => setAutofillTarget(e.target.value)}
+              className={`w-full sm:w-auto rounded-full px-4 py-3 font-bold outline-none ${
+                darkMode
+                  ? "bg-slate-800 text-white border border-slate-600"
+                  : "bg-white text-slate-900 border border-slate-300"
+              }`}
+            >
+              <option value="roundOf32">Round of 32 only</option>
+              <option value="roundOf16">Through Round of 16</option>
+              <option value="quarterFinals">Through Quarterfinals</option>
+              <option value="semiFinals">Through Semifinals</option>
+              <option value="final">Entire Tournament</option>
+            </select>
+  
+            <button
+              onClick={handleResetBracket}
+              className="w-full sm:w-auto rounded-full bg-red-600 text-white px-6 py-3 font-bold hover:bg-red-700 transition"
+            >
+              Reset Bracket
+            </button>
+  
+            <button
+              onClick={handleAutofillBracket}
+              className="w-full sm:w-auto rounded-full bg-purple-600 text-white px-6 py-3 font-bold hover:bg-purple-700 transition"
+            >
+              Simulate Bracket
+            </button>
+          </div>
+        </div>
+  
+        <div className="-mx-3 sm:mx-0 overflow-x-auto pb-4">
+          <div
+            id="bracket-root"
+            className={`relative mx-auto w-[1810px] h-[1330px] ${
+              darkMode ? "bg-slate-900" : "bg-white"
+            }`}
+          >
+            <Headers darkMode={darkMode} />
+            <BracketLines />
+  
+            <Side
+              side="left"
+              bracket={bracket}
+              onPick={pickWinner}
+              onScoreChange={updateScore}
+              darkMode={darkMode}
+            />
+  
+            <Center
+              bracket={bracket}
+              onPick={pickWinner}
+              onScoreChange={updateScore}
+              darkMode={darkMode}
+            />
+  
+            <Side
+              side="right"
+              bracket={bracket}
+              onPick={pickWinner}
+              onScoreChange={updateScore}
+              darkMode={darkMode}
+            />
+          </div>
+        </div>
+      </section>
+    );
+  }
 
 function Headers({ darkMode }) {
   const headers = [

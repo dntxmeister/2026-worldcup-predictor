@@ -561,117 +561,121 @@ export default function ExpertGroupStage({
   function simulateRemainingFixtures() {
     setResults(prev => {
       const nextResults = { ...prev };
-  
+
       groups.forEach(group => {
         const matches = getGroupSchedule(group);
         const groupResults =
           nextResults[group.id] || Array.from({ length: 6 }, () => emptyResult());
-  
+
         nextResults[group.id] = groupResults.map((result, index) => {
           const alreadyPicked =
             result &&
             result.scoreA !== "" &&
             result.scoreB !== "";
-  
+
           if (alreadyPicked) return result;
-  
+
           const match = matches[index];
-  
+
           if (!match?.teamAObj || !match?.teamBObj) {
             return result || emptyResult();
           }
-  
+
           const teamARank = fifaRankPower[match.teamAObj.fifaCode] || 120;
           const teamBRank = fifaRankPower[match.teamBObj.fifaCode] || 120;
           const rankDiff = Math.abs(teamARank - teamBRank);
-  
+
           const drawChance =
             rankDiff <= 8 ? 0.3 :
             rankDiff <= 20 ? 0.22 :
             rankDiff <= 40 ? 0.14 :
             0.08;
-  
+
           if (Math.random() < drawChance) {
             const drawScore = getRandomDrawScore();
-  
+
             return {
               scoreA: drawScore,
               scoreB: drawScore
             };
           }
-  
+
           const teamAWins = teamARank < teamBRank
             ? Math.random() < 0.72
             : Math.random() < 0.28;
-  
+
           if (teamAWins) {
             const [winnerScore, loserScore] = getWinScore(
               match.teamAObj,
               match.teamBObj
             );
-  
+
             return {
               scoreA: winnerScore,
               scoreB: loserScore
             };
           }
-  
+
           const [winnerScore, loserScore] = getWinScore(
             match.teamBObj,
             match.teamAObj
           );
-  
+
           return {
             scoreA: loserScore,
             scoreB: winnerScore
           };
         });
       });
-  
+
       return nextResults;
     });
   }
 
   return (
     <section
-      className={`rounded-3xl shadow-2xl p-4 ${
+      className={`rounded-3xl shadow-2xl p-3 sm:p-4 ${
         darkMode ? "bg-slate-900 text-white" : "bg-white text-slate-900"
       }`}
     >
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-4">
         <div>
-          <h2 className="text-2xl font-extrabold">
+          <h2 className="text-2xl sm:text-3xl font-extrabold">
             Expert Mode Predictor
           </h2>
 
-          <p className={darkMode ? "text-slate-300" : "text-gray-600"}>
+          <p
+            className={`text-sm sm:text-base ${
+              darkMode ? "text-slate-300" : "text-gray-600"
+            }`}
+          >
             Select the team, manually input scores, or autosimulate fixtures to witness how the tournament plays out in real-time!
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-  <button
-    onClick={simulateRemainingFixtures}
-    className="rounded-full px-5 py-2 font-bold bg-purple-600 text-white hover:bg-purple-700"
-  >
-    Simulate Fixtures
-  </button>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+          <button
+            onClick={simulateRemainingFixtures}
+            className="rounded-full px-5 py-3 sm:py-2 font-bold bg-purple-600 text-white hover:bg-purple-700"
+          >
+            Simulate Fixtures
+          </button>
 
-  <button
-    onClick={onGenerateBracket}
-    disabled={!canGenerate}
-    className={`rounded-full px-5 py-2 font-bold ${
-      canGenerate
-        ? "bg-blue-600 text-white hover:bg-blue-700"
-        : "bg-gray-400 text-white cursor-not-allowed"
-    }`}
-  >
-    Predict Bracket
-  </button>
-</div>
+          <button
+            onClick={onGenerateBracket}
+            disabled={!canGenerate}
+            className={`rounded-full px-5 py-3 sm:py-2 font-bold ${
+              canGenerate
+                ? "bg-blue-600 text-white hover:bg-blue-700"
+                : "bg-gray-400 text-white cursor-not-allowed"
+            }`}
+          >
+            Predict Bracket
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
         {groups.map(group => {
           const matches = getGroupSchedule(group);
           const table = standingsByGroup[group.id] || [];
@@ -679,80 +683,86 @@ export default function ExpertGroupStage({
           return (
             <div
               key={group.id}
-              className={`rounded-xl border p-1.5 ${
+              className={`rounded-xl border p-2 sm:p-1.5 min-w-0 ${
                 darkMode
                   ? "bg-slate-800 border-slate-700"
                   : "bg-slate-100 border-slate-200"
               }`}
             >
-              <h3 className="text-lg font-extrabold mb-2">{group.name}</h3>
+              <h3 className="text-xl sm:text-lg font-extrabold mb-2">
+                {group.name}
+              </h3>
 
               <div
-                className={`rounded-lg overflow-hidden mb-2 ${
+                className={`rounded-lg overflow-x-auto mb-2 ${
                   darkMode ? "bg-slate-900" : "bg-white"
                 }`}
               >
-                <div
-                  className={`grid grid-cols-[16px_1fr_20px_20px_20px_20px_20px_20px_20px_24px] gap-1 px-1.5 py-1 text-[9px] font-bold ${
-                    darkMode ? "bg-slate-700" : "bg-slate-200"
-                  }`}
-                >
-                  <div>#</div>
-                  <div>Team</div>
-                  <div>MP</div>
-                  <div>W</div>
-                  <div>D</div>
-                  <div>L</div>
-                  <div>GF</div>
-                  <div>GA</div>
-                  <div>GD</div>
-                  <div>Pts</div>
-                </div>
-
-                {table.map((team, index) => (
+                <div className="min-w-[420px]">
                   <div
-                    key={team.fifaCode}
-                    className={`grid grid-cols-[16px_1fr_20px_20px_20px_20px_20px_20px_20px_24px] gap-1 items-center px-1.5 py-1 border-t text-[10px] ${
-                      darkMode ? "border-slate-700" : "border-slate-200"
+                    className={`grid grid-cols-[24px_1fr_28px_28px_28px_28px_28px_28px_28px_34px] sm:grid-cols-[16px_1fr_20px_20px_20px_20px_20px_20px_20px_24px] gap-1 px-2 sm:px-1.5 py-1 text-[10px] sm:text-[9px] font-bold ${
+                      darkMode ? "bg-slate-700" : "bg-slate-200"
                     }`}
                   >
-                    <div className="font-bold">{index + 1}</div>
-
-                    <div className="flex items-center gap-1 font-medium min-w-0 overflow-hidden">
-                      <span
-                        className={`fi fi-${team.flagCode} rounded-sm flex-shrink-0`}
-                      />
-
-                      <span className="truncate text-[10px]">{team.name}</span>
-                    </div>
-
-                    <div>{team.played}</div>
-                    <div>{team.wins}</div>
-                    <div>{team.draws}</div>
-                    <div>{team.losses}</div>
-                    <div>{team.goalsFor}</div>
-                    <div>{team.goalsAgainst}</div>
-                    <div>{team.goalDifference}</div>
-                    <div className="font-bold">{team.points}</div>
+                    <div>#</div>
+                    <div>Team</div>
+                    <div>MP</div>
+                    <div>W</div>
+                    <div>D</div>
+                    <div>L</div>
+                    <div>GF</div>
+                    <div>GA</div>
+                    <div>GD</div>
+                    <div>Pts</div>
                   </div>
-                ))}
+
+                  {table.map((team, index) => (
+                    <div
+                      key={team.fifaCode}
+                      className={`grid grid-cols-[24px_1fr_28px_28px_28px_28px_28px_28px_28px_34px] sm:grid-cols-[16px_1fr_20px_20px_20px_20px_20px_20px_20px_24px] gap-1 items-center px-2 sm:px-1.5 py-1 border-t text-[11px] sm:text-[10px] ${
+                        darkMode ? "border-slate-700" : "border-slate-200"
+                      }`}
+                    >
+                      <div className="font-bold">{index + 1}</div>
+
+                      <div className="flex items-center gap-1 font-medium min-w-0 overflow-hidden">
+                        <span
+                          className={`fi fi-${team.flagCode} rounded-sm flex-shrink-0`}
+                        />
+
+                        <span className="truncate text-[11px] sm:text-[10px]">
+                          {team.name}
+                        </span>
+                      </div>
+
+                      <div>{team.played}</div>
+                      <div>{team.wins}</div>
+                      <div>{team.draws}</div>
+                      <div>{team.losses}</div>
+                      <div>{team.goalsFor}</div>
+                      <div>{team.goalsAgainst}</div>
+                      <div>{team.goalDifference}</div>
+                      <div className="font-bold">{team.points}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-2 sm:space-y-1.5">
                 {matches.map((match, index) => {
                   const result = results[group.id]?.[index] || emptyResult();
 
                   return (
                     <div
                       key={`${group.id}-${index}`}
-                      className={`rounded-md border px-1.5 py-1 ${
+                      className={`rounded-md border px-2 sm:px-1.5 py-2 sm:py-1 ${
                         darkMode
                           ? "bg-slate-900 border-slate-700"
                           : "bg-white border-slate-200"
                       }`}
                     >
                       <div
-                        className={`mb-1 text-center text-[9px] font-bold ${
+                        className={`mb-1 text-center text-[10px] sm:text-[9px] font-bold ${
                           darkMode ? "text-blue-300" : "text-blue-700"
                         }`}
                       >
@@ -775,7 +785,7 @@ export default function ExpertGroupStage({
                                 e.target.value
                               )
                             }
-                            className={`w-10 h-8 rounded-md border text-center text-sm font-extrabold ${
+                            className={`w-11 sm:w-10 h-9 sm:h-8 rounded-md border text-center text-sm font-extrabold ${
                               darkMode
                                 ? "bg-slate-800 border-slate-600 text-white"
                                 : "bg-white border-slate-300 text-slate-900"
@@ -796,7 +806,7 @@ export default function ExpertGroupStage({
                                 e.target.value
                               )
                             }
-                            className={`w-10 h-8 rounded-md border text-center text-sm font-extrabold ${
+                            className={`w-11 sm:w-10 h-9 sm:h-8 rounded-md border text-center text-sm font-extrabold ${
                               darkMode
                                 ? "bg-slate-800 border-slate-600 text-white"
                                 : "bg-white border-slate-300 text-slate-900"
@@ -807,24 +817,24 @@ export default function ExpertGroupStage({
                         <TeamLabel team={match.teamBObj} align="right" />
                       </div>
 
-                      <div className="mt-1 flex justify-center gap-1 flex-wrap">
+                      <div className="mt-2 sm:mt-1 flex justify-center gap-1 flex-wrap">
                         <button
                           onClick={() => quickPick(group.id, index, "A")}
-                          className="rounded-full bg-green-600 text-white px-2.5 py-1 text-[11px] font-extrabold"
+                          className="rounded-full bg-green-600 text-white px-3 sm:px-2.5 py-1 text-[11px] font-extrabold"
                         >
                           {match.teamAObj.fifaCode}
                         </button>
 
                         <button
                           onClick={() => quickPick(group.id, index, "D")}
-                          className="rounded-full bg-yellow-400 text-slate-900 px-2.5 py-1 text-[11px] font-extrabold"
+                          className="rounded-full bg-yellow-400 text-slate-900 px-3 sm:px-2.5 py-1 text-[11px] font-extrabold"
                         >
                           Draw
                         </button>
 
                         <button
                           onClick={() => quickPick(group.id, index, "B")}
-                          className="rounded-full bg-green-600 text-white px-2.5 py-1 text-[11px] font-extrabold"
+                          className="rounded-full bg-green-600 text-white px-3 sm:px-2.5 py-1 text-[11px] font-extrabold"
                         >
                           {match.teamBObj.fifaCode}
                         </button>
@@ -839,106 +849,110 @@ export default function ExpertGroupStage({
       </div>
 
       <div
-        className={`mt-6 rounded-3xl border p-5 ${
+        className={`mt-6 rounded-3xl border p-4 sm:p-5 ${
           darkMode
             ? "bg-slate-800 border-slate-700"
             : "bg-slate-50 border-slate-200"
         }`}
       >
-        <div className="flex justify-between items-center mb-4 gap-4">
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-4">
           <div>
-            <h3 className="text-xl font-extrabold">
+            <h3 className="text-xl sm:text-2xl font-extrabold">
               Ranked Third-Place Teams
             </h3>
 
-            <p className={darkMode ? "text-slate-300" : "text-slate-600"}>
+            <p
+              className={`text-sm sm:text-base ${
+                darkMode ? "text-slate-300" : "text-slate-600"
+              }`}
+            >
               Top 8 advance automatically using FIFA rules: points, GD, GF, then
               FIFA ranking.
             </p>
           </div>
 
           <div
-            className={`rounded-full px-4 py-1.5 text-sm font-bold whitespace-nowrap ${
-                darkMode
+            className={`rounded-full px-4 py-2 sm:py-1.5 text-sm font-bold whitespace-nowrap text-center ${
+              darkMode
                 ? "bg-slate-700 text-slate-200 border border-slate-600"
                 : "bg-slate-200 text-slate-700 border border-slate-300"
             }`}
-            >
+          >
             Top 8 advance
-            </div>
+          </div>
         </div>
 
         <div className="overflow-x-auto rounded-2xl border border-slate-600">
-  <table className="w-full text-sm">
-    <thead className={darkMode ? "bg-slate-700" : "bg-slate-200"}>
-      <tr>
-        <th className="px-3 py-2 text-left">Rank</th>
-        <th className="px-3 py-2 text-left">Team</th>
-        <th className="px-3 py-2 text-left">Group</th>
-        <th className="px-3 py-2 text-center">Pts</th>
-        <th className="px-3 py-2 text-center">GD</th>
-        <th className="px-3 py-2 text-center">GF</th>
-        <th className="px-3 py-2 text-center">Status</th>
-      </tr>
-    </thead>
+          <table className="min-w-[760px] w-full text-sm">
+            <thead className={darkMode ? "bg-slate-700" : "bg-slate-200"}>
+              <tr>
+                <th className="px-3 py-2 text-left">Rank</th>
+                <th className="px-3 py-2 text-left">Team</th>
+                <th className="px-3 py-2 text-left">Group</th>
+                <th className="px-3 py-2 text-center">Pts</th>
+                <th className="px-3 py-2 text-center">GD</th>
+                <th className="px-3 py-2 text-center">GF</th>
+                <th className="px-3 py-2 text-center">Status</th>
+              </tr>
+            </thead>
 
-    <tbody>
-      {rankedThirdPlaceTeams.map((team, index) => {
-        const advances = index < 8;
+            <tbody>
+              {rankedThirdPlaceTeams.map((team, index) => {
+                const advances = index < 8;
 
-        return (
-          <tr
-            key={`${team.groupId}-${team.fifaCode}`}
-            className={`border-t ${
-              advances
-                ? "bg-green-500 text-white"
-                : darkMode
-                ? "bg-slate-900 text-slate-300 border-slate-700"
-                : "bg-white text-slate-700 border-slate-200"
-            }`}
-          >
-            <td className="px-3 py-2 font-extrabold">
-              #{index + 1}
-            </td>
+                return (
+                  <tr
+                    key={`${team.groupId}-${team.fifaCode}`}
+                    className={`border-t ${
+                      advances
+                        ? "bg-green-500 text-white"
+                        : darkMode
+                        ? "bg-slate-900 text-slate-300 border-slate-700"
+                        : "bg-white text-slate-700 border-slate-200"
+                    }`}
+                  >
+                    <td className="px-3 py-2 font-extrabold">
+                      #{index + 1}
+                    </td>
 
-            <td className="px-3 py-2">
-              <div className="flex items-center gap-2 font-bold">
-                <span className={`fi fi-${team.flagCode} rounded-sm`} />
-                <span>{team.name}</span>
-              </div>
-            </td>
+                    <td className="px-3 py-2">
+                      <div className="flex items-center gap-2 font-bold">
+                        <span className={`fi fi-${team.flagCode} rounded-sm`} />
+                        <span>{team.name}</span>
+                      </div>
+                    </td>
 
-            <td className="px-3 py-2 font-semibold">
-              {team.groupName}
-            </td>
+                    <td className="px-3 py-2 font-semibold">
+                      {team.groupName}
+                    </td>
 
-            <td className="px-3 py-2 text-center font-extrabold">
-              {team.points}
-            </td>
+                    <td className="px-3 py-2 text-center font-extrabold">
+                      {team.points}
+                    </td>
 
-            <td className="px-3 py-2 text-center font-extrabold">
-              {team.goalDifference}
-            </td>
+                    <td className="px-3 py-2 text-center font-extrabold">
+                      {team.goalDifference}
+                    </td>
 
-            <td className="px-3 py-2 text-center font-extrabold">
-              {team.goalsFor}
-            </td>
+                    <td className="px-3 py-2 text-center font-extrabold">
+                      {team.goalsFor}
+                    </td>
 
-            <td className="px-3 py-2 text-center font-extrabold">
-              {advances ? "Qualifies" : "Out"}
-            </td>
-          </tr>
-        );
-      })}
-    </tbody>
-  </table>
-</div>
+                    <td className="px-3 py-2 text-center font-extrabold">
+                      {advances ? "Qualifies" : "Out"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
 
         <div className="mt-6 flex justify-center">
           <button
             onClick={onGenerateBracket}
             disabled={!canGenerate}
-            className={`rounded-full px-8 py-4 text-lg font-bold ${
+            className={`rounded-full px-8 py-4 text-lg font-bold w-full sm:w-auto ${
               canGenerate
                 ? "bg-blue-600 text-white hover:bg-blue-700"
                 : "bg-gray-400 text-white cursor-not-allowed"
@@ -955,7 +969,7 @@ export default function ExpertGroupStage({
 function TeamLabel({ team, align }) {
   return (
     <div
-      className={`flex items-center gap-1.5 font-extrabold text-xs min-w-0 ${
+      className={`flex items-center gap-1.5 font-extrabold text-xs sm:text-xs min-w-0 ${
         align === "right" ? "justify-end" : "justify-start"
       }`}
     >
@@ -963,7 +977,7 @@ function TeamLabel({ team, align }) {
         className={`fi fi-${team.flagCode} rounded-sm text-base flex-shrink-0`}
       />
 
-      <span>{team.fifaCode}</span>
+      <span className="truncate">{team.fifaCode}</span>
     </div>
   );
 }

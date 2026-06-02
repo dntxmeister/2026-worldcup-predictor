@@ -189,25 +189,31 @@ export default function GroupStage({
 
   return (
     <section
-      className={`rounded-3xl shadow-2xl p-5 ${
+      className={`rounded-3xl shadow-2xl p-3 sm:p-5 ${
         darkMode ? "bg-slate-900 text-white" : "bg-white text-slate-900"
       }`}
     >
-      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-6">
         <div>
-          <h2 className="text-4xl font-extrabold">Group Stage Predictor</h2>
+          <h2 className="text-3xl sm:text-4xl font-extrabold">
+            Group Stage Predictor
+          </h2>
 
-          <p className={darkMode ? "text-slate-300" : "text-slate-600"}>
+          <p
+            className={`text-sm sm:text-base ${
+              darkMode ? "text-slate-300" : "text-slate-600"
+            }`}
+          >
             Click teams in order from 1st to 4th. Once you select 3 teams, the
             remaining team automatically fills 4th place.
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-3">
           {onAutofillGroups && !tournamentChallengeLocked && (
             <button
               onClick={onAutofillGroups}
-              className="rounded-full bg-purple-600 text-white px-5 py-2 font-bold hover:bg-purple-700 transition"
+              className="rounded-full bg-purple-600 text-white px-5 py-3 sm:py-2 font-bold hover:bg-purple-700 transition"
             >
               Autofill Groups
             </button>
@@ -227,7 +233,7 @@ export default function GroupStage({
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {groups.map(group => {
           const sourceTeams = getSourceTeams(group);
           const pickedTeams = getPickedTeams(group);
@@ -241,23 +247,23 @@ export default function GroupStage({
                   : "bg-slate-100 border-slate-200"
               }`}
             >
-              <div className="flex justify-between items-center mb-5">
+              <div className="flex justify-between items-center gap-3 mb-5">
                 <h3 className="text-3xl font-extrabold">{group.name}</h3>
 
                 <button
-                onClick={() => clearGroup(group.id)}
-                disabled={tournamentChallengeLocked}
-                className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${
+                  onClick={() => clearGroup(group.id)}
+                  disabled={tournamentChallengeLocked}
+                  className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${
                     tournamentChallengeLocked
-                    ? darkMode
+                      ? darkMode
                         ? "bg-slate-600 text-white opacity-40 cursor-not-allowed"
                         : "bg-slate-300 text-slate-500 opacity-40 cursor-not-allowed"
-                    : darkMode
-                    ? "bg-slate-600 text-white hover:bg-slate-500"
-                    : "bg-slate-200 text-slate-700 border border-slate-300 hover:bg-slate-300"
-                }`}
+                      : darkMode
+                      ? "bg-slate-600 text-white hover:bg-slate-500"
+                      : "bg-slate-200 text-slate-700 border border-slate-300 hover:bg-slate-300"
+                  }`}
                 >
-                Clear
+                  Clear
                 </button>
               </div>
 
@@ -276,7 +282,7 @@ export default function GroupStage({
                         pickedTeams.length >= 4
                       }
                       onClick={() => selectTeam(group.id, team)}
-                      className={`rounded-2xl border px-1 py-4 min-h-[104px] flex flex-col items-center justify-center gap-2 transition ${
+                      className={`rounded-2xl border px-1 py-3 sm:py-4 min-h-[82px] sm:min-h-[104px] flex flex-col items-center justify-center gap-1.5 sm:gap-2 transition ${
                         selected || tournamentChallengeLocked
                           ? darkMode
                             ? "bg-slate-900 border-slate-600 opacity-40 cursor-not-allowed"
@@ -287,10 +293,10 @@ export default function GroupStage({
                       }`}
                     >
                       <span
-                        className={`fi fi-${team.flagCode} rounded-sm text-3xl flex-shrink-0`}
+                        className={`fi fi-${team.flagCode} rounded-sm text-2xl sm:text-3xl flex-shrink-0`}
                       />
 
-                      <span className="text-base font-extrabold">
+                      <span className="text-sm sm:text-base font-extrabold">
                         {team.fifaCode}
                       </span>
                     </button>
@@ -312,7 +318,7 @@ export default function GroupStage({
                         key={`${group.id}-empty-${index}`}
                         onDragOver={e => e.preventDefault()}
                         onDrop={() => handleDrop(group.id, index)}
-                        className={`border-b last:border-b-0 px-4 py-6 ${
+                        className={`border-b last:border-b-0 px-4 py-5 sm:py-6 ${
                           darkMode ? "border-slate-700" : "border-slate-200"
                         }`}
                       >
@@ -336,7 +342,7 @@ export default function GroupStage({
                       onDragStart={() => handleDragStart(group.id, index)}
                       onDragOver={e => e.preventDefault()}
                       onDrop={() => handleDrop(group.id, index)}
-                      className={`border-b last:border-b-0 px-4 py-6 cursor-grab active:cursor-grabbing ${
+                      className={`border-b last:border-b-0 px-4 py-5 sm:py-6 cursor-grab active:cursor-grabbing ${
                         darkMode ? "border-slate-700" : "border-slate-200"
                       }`}
                     >
@@ -361,11 +367,11 @@ export default function GroupStage({
                           </div>
 
                           <span
-                            className={`fi fi-${team.flagCode} rounded-sm text-3xl flex-shrink-0`}
+                            className={`fi fi-${team.flagCode} rounded-sm text-2xl sm:text-3xl flex-shrink-0`}
                           />
 
                           <div className="min-w-0">
-                            <div className="text-lg font-bold truncate">
+                            <div className="text-base sm:text-lg font-bold truncate">
                               {team.name}
                             </div>
 
@@ -391,7 +397,7 @@ export default function GroupStage({
                         <button
                           type="button"
                           disabled={tournamentChallengeLocked}
-                          className={`text-xl leading-none font-normal ${
+                          className={`text-base sm:text-xl leading-none font-normal ${
                             darkMode
                               ? "text-slate-400 hover:text-white"
                               : "text-slate-500 hover:text-slate-700"
@@ -415,35 +421,39 @@ export default function GroupStage({
       </div>
 
       <div
-        className={`mt-8 rounded-3xl border p-6 ${
+        className={`mt-8 rounded-3xl border p-4 sm:p-6 ${
           darkMode
             ? "bg-slate-800 border-slate-700"
             : "bg-slate-50 border-slate-200"
         }`}
       >
-        <div className="flex flex-wrap justify-between items-center gap-4 mb-5">
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-5">
           <div>
-            <h3 className="text-3xl font-extrabold">
+            <h3 className="text-2xl sm:text-3xl font-extrabold">
               Select Advancing Third-Place Teams
             </h3>
 
-            <p className={darkMode ? "text-slate-300" : "text-slate-600"}>
+            <p
+              className={`text-sm sm:text-base ${
+                darkMode ? "text-slate-300" : "text-slate-600"
+              }`}
+            >
               Choose exactly 8 of 12 third-place teams.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             {onAutofillThirdPlaceTeams && !tournamentChallengeLocked && (
               <button
                 onClick={onAutofillThirdPlaceTeams}
-                className="rounded-full bg-purple-600 text-white px-5 py-2 font-bold hover:bg-purple-700 transition"
+                className="rounded-full bg-purple-600 text-white px-5 py-3 sm:py-2 font-bold hover:bg-purple-700 transition"
               >
                 Autoselect Teams
               </button>
             )}
 
             <div
-              className={`rounded-full px-5 py-2 font-extrabold ${
+              className={`rounded-full px-5 py-3 sm:py-2 text-center font-extrabold ${
                 tournamentChallengeMode && scoreResult
                   ? "bg-blue-600 text-white"
                   : selectedThirdPlaceCodes.length === 8
@@ -540,7 +550,7 @@ export default function GroupStage({
           })}
         </div>
 
-        <div className="mt-8 flex justify-center gap-4">
+        <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
           <button
             onClick={() => setSelectedThirdPlaceCodes([])}
             disabled={tournamentChallengeLocked}
