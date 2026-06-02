@@ -645,7 +645,7 @@ export default function ExpertGroupStage({
           </h2>
 
           <p className={darkMode ? "text-slate-300" : "text-gray-600"}>
-            Select the team or manually input scores to witness how the tournament plays out in real-time!
+            Select the team, manually input scores, or autosimulate fixtures to witness how the tournament plays out in real-time!
           </p>
         </div>
 
